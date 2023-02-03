@@ -1,0 +1,19 @@
+#!/bin/bash
+echo Starting Execution!
+
+if [ "$1" == "install" ];
+then
+	echo Beginning install process
+	pip install GitPython
+	python3 setup.py
+
+
+elif [ "$1" == "build" ];
+then
+	echo Beginning build process
+else
+	echo Running main program
+	echo File location: $1
+	#call Jason's typescript file 
+fi
+
