@@ -1,0 +1,16 @@
+Line 1: GitHub URL
+Line 2: Lines of code (integer number)
+Line 3: Lines of documentation (integer number)
+Line 4: Ramp up score (double value)
+Line 5: License (String containing license)
+Line 6: Responsive Maintainer score (double value)
+Line 7: Bus factor score (double value)
+Line 8: Correctness score (double value)
+
+
+-------------------------------------------------------------------------------
+NOTES: 
+-All lines should only contain the specified information
+-Lines are denoted by a standard newline character
+-Scores should be between [0,1]
+-No extra spaces are needed on any given line
