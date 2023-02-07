@@ -1,14 +1,12 @@
-
 const fs = require("fs");
 const {Octokit} = require("@octokit/rest");
 const { request } = require("@octokit/request");
 
 const octokit = new Octokit ({
-    auth: 'insert auth here', 
+    auth: `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 `, 
     userAgent: '461npm v1.2.3',
     baseUrl: 'https://api.github.com'
 });
-
 
 //license 
 const resp = async(owner, repo) => {
@@ -35,10 +33,12 @@ const resp = async(owner, repo) => {
 //responsiveness calculation
 const issues = async(owner, repo) =>{
     //total issues
+   
     const issues = await octokit.issues.listForRepo({
         owner, 
         repo, 
     });
+
     //closed issues
     const closedissues = await octokit.issues.listForRepo({
         owner,
@@ -56,36 +56,34 @@ const issues = async(owner, repo) =>{
     const issueLen = issues.data.length;
     const closedIssueLen = closedissues.data.length; 
 
-    const total = issueLen + closedIssueLen
-    //console.log(total)
+    const total = String(closedIssueLen/issueLen)
+
+    // fs.writeFile('data.json', JSON.stringify(total), (err) => {
+    //     if (err) throw err;
+    //     console.log('Data has been written to file');
+    // });
+
+
+    const fileName = 'data.json';
+    fs.readFile(fileName, 'utf8', (err, data) => {
+        if (err) throw err;
+
+    let jsonData = JSON.parse(total);
+    jsonData.newKey = 'new value';
+
+
+    fs.appendFile(fileName,'\n', 'utf8', (err) => {
+        if (err) throw err;
+        console.log('Data appended to file');
+      });
+
+    fs.appendFile(fileName, JSON.stringify(total), 'utf8', (err) => {
+        if (err) throw err;
+        console.log('Data appended to file');
+      });
     
-    ////___________________________________ NOT DONE (contributor response time) __________________________________________________
-    const events = await octokit.issues.listEventsForTimeline({
-        owner, 
-        repo,
-        issue_number: 1,
-    });
+});
 
-    let startTime; 
-    let endTime;
-
-    for (const event of events.data) {
-        if(event.event == "opened"){
-            startTime = new Date(event.created_at);
-        }
-        else if(event.event == "commented"){
-            endTime = new Date(event.created_at); 
-            break; 
-        }
-    }
-
-    if(!startTime || !endTime ){
-        return -1;
-    }
-
-    const diffTime = endTime.getTime() - startTime.getTime(); 
-    console.log(diffTime / 1000 / 60); 
- //______________________________________________________________________________________
 };
 
 
