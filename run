@@ -7,7 +7,6 @@ then
 	pip install GitPython
 	python3 setup.py
 	npm install typescript
-	mkdir src
 	npm install fs
 	npm install readline
 	npm install python-shell
@@ -15,6 +14,7 @@ then
 	npm install @octokit/rest
 	npm install @octokit/core
 	npm install @octokit/request
+	npm install types
 
 elif [ "$1" == "build" ];
 then
