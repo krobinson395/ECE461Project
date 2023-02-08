@@ -21,6 +21,8 @@ elif [ "$1" == "build" ];
 then
 	echo Beginning build process
 	tsc src/npmToGithub.ts
+	tsc src/done2.ts
+	tsc src/busfactor.ts
 else
 	echo Running main program
 	echo File location: $1
