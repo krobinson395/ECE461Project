@@ -23,6 +23,9 @@ then
 else
 	echo Running main program
 	echo File location: $1
+	tsc src/npmToGithub.ts
+	node src/npmToGithub.js $1
+	echo Finished Running
 	 
 fi
 
