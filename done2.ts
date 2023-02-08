@@ -16,7 +16,6 @@ const resp = async(owner, repo) => {
             repo,
           
         });
-        //console.log(repository.license.name); 
 
         fs.writeFile('data.json', JSON.stringify(repository.license.name), (err) => {
             if (err) throw err;
@@ -33,7 +32,6 @@ const resp = async(owner, repo) => {
 //responsiveness calculation
 const issues = async(owner, repo) =>{
     //total issues
-   
     const issues = await octokit.issues.listForRepo({
         owner, 
         repo, 
@@ -58,23 +56,16 @@ const issues = async(owner, repo) =>{
 
     const total = String(closedIssueLen/issueLen)
 
-    // fs.writeFile('data.json', JSON.stringify(total), (err) => {
-    //     if (err) throw err;
-    //     console.log('Data has been written to file');
-    // });
-
-
     const fileName = 'data.json';
     fs.readFile(fileName, 'utf8', (err, data) => {
         if (err) throw err;
 
     let jsonData = JSON.parse(total);
-    jsonData.newKey = 'new value';
+    //jsonData.newKey = 'new value';
 
 
     fs.appendFile(fileName,'\n', 'utf8', (err) => {
         if (err) throw err;
-        console.log('Data appended to file');
       });
 
     fs.appendFile(fileName, JSON.stringify(total), 'utf8', (err) => {
@@ -83,10 +74,11 @@ const issues = async(owner, repo) =>{
       });
     
 });
-
 };
 
+export async function liceMain (owner: string, repo: string){
+    resp(owner, repo); //license 
+    issues(owner, repo); //responsiveness calculation
+}
 
-//parameter 1 = repo, parameter 2 = owner 
-resp(process.argv[2], process.argv[3]); //license 
-issues(process.argv[2], process.argv[3]); //responsiveness calculation
+liceMain("nullivex", "nodist")
