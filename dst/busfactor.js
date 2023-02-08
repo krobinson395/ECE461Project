@@ -39,11 +39,21 @@ function calculateBusFactor(forkCount) {
     else
         return forkCount / 1000;
 }
-// example driver code
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield getForkCount("node-fetch", "node-fetch");
-    const data = JSON.parse(JSON.stringify(response));
-    const busFactor = calculateBusFactor(data.repository.forkCount);
-    console.log(busFactor);
-    fs.writeFileSync('info.tmp', busFactor.toString());
-}))();
+export function busFactorMain(owner, repo) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield getForkCount(owner, repo);
+        const data = JSON.parse(JSON.stringify(response));
+        const busFactor = calculateBusFactor(data.repository.forkCount);
+        fs.writeFileSync('info.tmp', busFactor.toString());
+    });
+}
+// main function call example
+// busFactorMain("node-fetch", "node-fetch")
+// old driver code
+// (async () => {
+//     const response = await getForkCount("node-fetch", "node-fetch")
+//     const data = JSON.parse(JSON.stringify(response))    
+//     const busFactor = calculateBusFactor(data.repository.forkCount)
+//     // console.log(busFactor)
+//     fs.writeFileSync('info.tmp', busFactor.toString());
+//   })()
