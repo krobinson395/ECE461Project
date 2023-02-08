@@ -51,7 +51,7 @@ export async function busFactorMain(owner: string, repo: string)
 
 
 // main function call example
-// busFactorMain("node-fetch", "node-fetch")
+busFactorMain("node-fetch", "node-fetch")
 
 
 // old driver code
