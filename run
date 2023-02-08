@@ -20,11 +20,12 @@ then
 elif [ "$1" == "build" ];
 then
 	echo Beginning build process
+	tsc src/npmToGithub.ts
 else
 	echo Running main program
 	echo File location: $1
-	tsc src/npmToGithub.ts
 	node src/npmToGithub.js $1
+	python3 fileCounter.py
 	echo Finished Running
 	 
 fi

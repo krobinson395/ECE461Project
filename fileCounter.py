@@ -4,22 +4,25 @@ import math
 import git
 import sys
 def main():
-    repoDir = './tmpRepo'
-    print(str(sys.argv[1]))
-    gitURL = str(sys.argv[1])
-    cloneRepo(gitURL)
-    createClocFile(repoDir, 'clocOutput')
-    clocOut = readClocFile('clocOutput')
-    #print('Comments: ' + str(clocOut[0]))
-    #print('Code Lines: ' + str(clocOut[1]))
-    #print('Total Lines: ' +  str(clocOut[2]))
-    rampUp = calcRampUp(clocOut[0], clocOut[1])
-    findTestDirs(repoDir)
-    numTestLines = countLinesTest('testList', repoDir)
-    correctness  = 1 if numTestLines > 20000 else numTestLines / 20000
-    #print('Ramp Up: ' + str(rampUp))
-    writeToFile('info.tmp', 'exampleGitHubURL', str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
-    deleteRepo()
+    file  = open('GithubURLS.txt', 'r')
+    lines = file.read().splitlines()
+    for line in lines:
+        gitURL = line
+        cloneRepo(gitURL)
+        createClocFile(repoDir, 'clocOutput')
+        clocOut = readClocFile('clocOutput')
+        rampUp = calcRampUp(clocOut[0], clocOut[1])
+        findTestDirs(repoDir)
+        numTestLines = countLinesTest('testList', repoDir)
+        correctness  = 1 if numTestLines > 20000 else numTestLines / 20000
+        #print('Ramp Up: ' + str(rampUp))
+        writeToFile('info.tmp', 'exampleGitHubURL', str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
+        deleteRepo()
+        tokens = line.split('/')
+        owner = tokens[tokens.len() - 2]
+        repo = tokens[tokens.len() - 1]
+        #Call extra js files
+        os.system('rm info.tmp')
 def createClocFile(repoDir, outputFile):
 
     clocLoc = 'cloc/cloc'
