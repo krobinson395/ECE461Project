@@ -22,7 +22,7 @@ def main():
         owner = tokens[tokens.len() - 2]
         repo = tokens[tokens.len() - 1]
         #Call extra js files
-        os.system('node run2.js ' + owner + ' ' + repo)
+        os.system('node licRespFetch.js ' + owner + ' ' + repo)
         os.system('node busfactor.js ' + owner + ' ' + repo)
         #TESTING
         os.system('cat info.tmp')
