@@ -41,8 +41,6 @@ function calculateBusFactor(forkCount: number)
 }
 
 
-
-// driver code
 export async function busFactorMain(owner: string, repo: string)
 {
     const response = await getForkCount(owner, repo)
@@ -50,3 +48,19 @@ export async function busFactorMain(owner: string, repo: string)
     const busFactor = calculateBusFactor(data.repository.forkCount)
     fs.writeFileSync('info.tmp', busFactor.toString());
 }
+
+
+// main function call example
+// busFactorMain("node-fetch", "node-fetch")
+
+
+// old driver code
+// (async () => {
+//     const response = await getForkCount("node-fetch", "node-fetch")
+//     const data = JSON.parse(JSON.stringify(response))    
+//     const busFactor = calculateBusFactor(data.repository.forkCount)
+//     // console.log(busFactor)
+
+//     fs.writeFileSync('info.tmp', busFactor.toString());
+
+//   })()
