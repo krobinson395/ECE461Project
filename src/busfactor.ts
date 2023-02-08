@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 dotenv.config() 
 import { Octokit } from "@octokit/core"
 import * as fs from 'fs';
