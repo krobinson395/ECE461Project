@@ -103,8 +103,4 @@ lineReader.on('line', (line) => {
 });
 
 console.log("near the end")
-var pyShell = PythonShell.run(pyFile, options, function (err:any) {
-    if(err) {console.log(err);}
-});
-
 console.log("end")
