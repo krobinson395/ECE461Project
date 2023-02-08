@@ -15,6 +15,7 @@ then
 	npm install @octokit/core
 	npm install @octokit/request
 	npm install types
+	npm i --save-dev @types/node
 
 elif [ "$1" == "build" ];
 then
