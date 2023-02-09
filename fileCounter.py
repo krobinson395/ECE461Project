@@ -9,22 +9,23 @@ def main():
     lines = file.read().splitlines()
     for line in lines:
         gitURL = line
-        cloneRepo(gitURL)
+        cloneRepo(gitURL, repoDir)
         createClocFile(repoDir, 'clocOutput')
         clocOut = readClocFile('clocOutput')
         rampUp = calcRampUp(clocOut[0], clocOut[1])
         findTestDirs(repoDir)
         numTestLines = countLinesTest('testList', repoDir)
-        correctness  = 1 if numTestLines > 20000 else numTestLines / 20000
+        correctness = numTestLines / (clocOut[1] - numTestLines) * 0.6
+        correctness  = 1 if correctness > 1 else correctness
         #print('Ramp Up: ' + str(rampUp))
-        writeToFile('info.tmp', 'exampleGitHubURL', str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
-        deleteRepo()
+        writeToFile('info.tmp', gitURL, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
+        deleteRepo(repoDir)
         tokens = line.split('/')
-        owner = tokens[tokens.len() - 2]
-        repo = tokens[tokens.len() - 1]
+        owner = tokens[len(tokens) - 2]
+        repo = tokens[len(tokens) - 1]
         #Call extra js files
-        os.system('node licRespFetch.js ' + owner + ' ' + repo)
-        os.system('node busfactor.js ' + owner + ' ' + repo)
+        os.system('node ./src/licRespFetch.js ' + owner + ' ' + repo)
+        os.system('node ./src/busfactor.js ' + owner + ' ' + repo)
         #TESTING
         os.system('cat info.tmp')
         os.system('rm info.tmp')
@@ -67,11 +68,11 @@ def writeToFile(fileName, gitURL, docLines, codeLines, rampUp, correctness):
     file.write(rampUp + "\n")
     file.write(correctness + "\n")
     file.close()
-def cloneRepo(gitURL):
-    git.Repo.clone_from(gitURL, './tmpRepo')
+def cloneRepo(gitURL, repoDir):
+    git.Repo.clone_from(gitURL, './' + repoDir)
 
-def deleteRepo():
-    os.system('rm -rf ./tmpRepo')
+def deleteRepo(repoDir):
+    os.system('rm -rf ./' + repoDir )
     #os.system('rmdir tmpRepo')
 
 def findTestDirs(repoDir):
