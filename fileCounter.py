@@ -20,8 +20,8 @@ def main():
         writeToFile('info.tmp', 'exampleGitHubURL', str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
         deleteRepo(repoDir)
         tokens = line.split('/')
-        owner = tokens[tokens.len() - 2]
-        repo = tokens[tokens.len() - 1]
+        owner = tokens[len(tokens) - 2]
+        repo = tokens[len(tokens) - 1]
         #Call extra js files
         os.system('node licRespFetch.js ' + owner + ' ' + repo)
         os.system('node busfactor.js ' + owner + ' ' + repo)
