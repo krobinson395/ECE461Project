@@ -9,7 +9,7 @@ def main():
     lines = file.read().splitlines()
     for line in lines:
         gitURL = line
-        cloneRepo(gitURL)
+        cloneRepo(gitURL, repoDir)
         createClocFile(repoDir, 'clocOutput')
         clocOut = readClocFile('clocOutput')
         rampUp = calcRampUp(clocOut[0], clocOut[1])
@@ -18,7 +18,7 @@ def main():
         correctness  = 1 if numTestLines > 20000 else numTestLines / 20000
         #print('Ramp Up: ' + str(rampUp))
         writeToFile('info.tmp', 'exampleGitHubURL', str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
-        deleteRepo()
+        deleteRepo(repoDir)
         tokens = line.split('/')
         owner = tokens[tokens.len() - 2]
         repo = tokens[tokens.len() - 1]
@@ -67,11 +67,11 @@ def writeToFile(fileName, gitURL, docLines, codeLines, rampUp, correctness):
     file.write(rampUp + "\n")
     file.write(correctness + "\n")
     file.close()
-def cloneRepo(gitURL):
-    git.Repo.clone_from(gitURL, './tmpRepo')
+def cloneRepo(gitURL, repoDir):
+    git.Repo.clone_from(gitURL, './' + repoDir)
 
-def deleteRepo():
-    os.system('rm -rf ./tmpRepo')
+def deleteRepo(repoDir):
+    os.system('rm -rf ./' + repoDir )
     #os.system('rmdir tmpRepo')
 
 def findTestDirs(repoDir):
