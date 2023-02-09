@@ -23,6 +23,10 @@ def main():
         tokens = line.split('/')
         owner = tokens[len(tokens) - 2]
         repo = tokens[len(tokens) - 1]
+
+        if repo.endswith(".git"):
+            repo = repo[:-4]
+    
         #Call extra js files
         os.system('node ./src/licRespFetch.js ' + owner + ' ' + repo)
         os.system('node ./src/busfactor.js ' + owner + ' ' + repo)
