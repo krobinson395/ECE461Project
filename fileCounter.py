@@ -14,8 +14,9 @@ def main():
         clocOut = readClocFile('clocOutput')
         rampUp = calcRampUp(clocOut[0], clocOut[1])
         findTestDirs(repoDir)
-        numTestLines = countLinesTest('testList', repoDir)
-        correctness  = 1 if numTestLines > 20000 else numTestLines / 20000
+        numTestLines = countLinesTest('testList', repoDir
+        correctness = numTestLines / clocOut[1] * 0.6
+        correctness  = 1 if correctness > 1 else correctness
         #print('Ramp Up: ' + str(rampUp))
         writeToFile('info.tmp', gitURL, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
         deleteRepo(repoDir)
