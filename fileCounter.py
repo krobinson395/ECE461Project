@@ -17,7 +17,7 @@ def main():
         numTestLines = countLinesTest('testList', repoDir)
         correctness  = 1 if numTestLines > 20000 else numTestLines / 20000
         #print('Ramp Up: ' + str(rampUp))
-        writeToFile('info.tmp', 'exampleGitHubURL', str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
+        writeToFile('info.tmp', gitURL, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
         deleteRepo(repoDir)
         tokens = line.split('/')
         owner = tokens[len(tokens) - 2]
