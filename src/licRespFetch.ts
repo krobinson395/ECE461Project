@@ -1,7 +1,7 @@
 const fs = require("fs");
 const {Octokit} = require("@octokit/rest");
 const { request } = require("@octokit/request");
-const {dotenv} = require("dotenv"); 
+import * as dotenv from 'dotenv'
 
 dotenv.config();
 
