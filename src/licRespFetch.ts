@@ -21,7 +21,7 @@ const resp = async(owner, repo) => {
         });
 
         if ((repository.license.name == "MIT License") || (repository.license.name == "GNU GPL")){
-            fs.appendFileSync('../info.tmp', "LGPLv2.1 Compatible");
+            fs.appendFileSync('info.tmp', "LGPLv2.1 Compatible");
         }
     }
     catch (error) {
@@ -58,9 +58,9 @@ const issues = async(owner, repo) =>{
 
     const total = String(closedIssueLen/issueLen)
 
-    fs.appendFileSync('../info.tmp', '\n');
+    fs.appendFileSync('info.tmp', '\n');
 
-    fs.appendFileSync('../info.tmp', (total).toString());
+    fs.appendFileSync('info.tmp', (total).toString());
     
 };
 
