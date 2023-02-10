@@ -17,7 +17,7 @@ def main():
         correctness = numTestLines / (clocOut[1] - numTestLines) * 0.6 + numTestLines * .001
         correctness  = 1 if correctness > 1 else correctness
         #print('Ramp Up: ' + str(rampUp))
-        rampUp = calcRampUp(clocOut[0], clocOut[1, numTestLines])
+        rampUp = calcRampUp(clocOut[0], clocOut[1], numTestLines)
         writeToFile('info.tmp', gitURL, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
         deleteRepo(repoDir)
         tokens = line.split('/')
@@ -30,8 +30,20 @@ def main():
         #Call extra js files
         os.system('node ./src/licRespFetch.js ' + owner + ' ' + repo)
         os.system('node ./src/busfactor.js ' + owner + ' ' + repo)
+        tempFile = open('info.tmp', 'r')
+        tempInfo = tempFile.read().splitlines()
+        #print(tempInfo)
+        netScore = float(tempInfo[3]) + float(tempInfo[4]) + float(tempInfo[6]) + float(tempInfo[7])
+        netScore = netScore / 4
+        tempFile.close()
+        print("PRINTNG NET SCORE")
+        print(str(netScore))
+        tempInfo = open('info.tmp', 'a')
+        tempInfo.write('\n' + str(netScore))
+        tempInfo.close()
         #TESTING
         os.system('cat info.tmp')
+        os.system('echo \n')
         os.system('rm info.tmp')
 def createClocFile(repoDir, outputFile):
 
