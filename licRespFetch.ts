@@ -31,22 +31,22 @@ async function license(owner: string , repo:string ) {
 };
 
 //responsiveness calculation
-async function responsiveness(owner: string, repo: string ) {
-    //total issues
-   
+async function responsiveness(owner: string, repo: string) {
+    //query for the total issues 
     const issues = await octokit.issues.listForRepo({
         owner, 
         repo, 
         state: 'all'
     });
 
-    //closed issues
+    //query for the closed issues
     const closedissues = await octokit.issues.listForRepo({
         owner,
         repo,
         state: 'closed'
     });
 
+    //error checking
     if (!issues.data.length) {
         throw new Error("No data in API response");
       } 
@@ -54,16 +54,41 @@ async function responsiveness(owner: string, repo: string ) {
     if (!closedissues.data.length) {
         throw new Error("No data in API response");
     } 
-    const issueLen = issues.data.length;
-    const closedIssueLen = closedissues.data.length; 
 
-    const total = String(closedIssueLen/issueLen)
+    //calcuate the ratio of closed issues/ total issues for the formula
+    const issueLen = issues.data.length; //num of total issues
+    const closedIssueLen = closedissues.data.length; //num of closed issues
+    const total = closedIssueLen/issueLen; //ratio calculation
 
-    fs.appendFileSync('info.tmp', '\n');
-    fs.appendFileSync('info.tmp', (total).toString());
-    fs.appendFileSync('info.tmp', '\n');
-};
+    //query for the commits 
+    const { data: commit } = await octokit.repos.listCommits({
+      owner,
+      repo,
+      per_page: 1
+    });
+    //date of last commit
+    const commitDate = commit[0].commit.committer.date;
+  
+    //calculation to find number of days since last commit
+    const currentDate = new Date();
 
+    const dateParts = commitDate.split("-");
+    const dateObject = new Date(
+        parseInt(dateParts[0]),
+        parseInt(dateParts[1]) - 1,
+        parseInt(dateParts[2])
+    )
+
+    const timeDifference = currentDate.getTime() - dateObject.getTime();
+    const differenceInDays = Math.round(timeDifference / (1000 * 3600 * 24));
+
+    //plugging values into the formula 
+    const num2 = 20 / differenceInDays; //(20/t)
+    const final = Math.tanh(total * num2);
+
+    console.log(final);
+}
+  
 export async function liceMain(owner: string, repo: string){
     //parameter 1 = repo, parameter 2 = owner
     license(owner, repo); //license 
