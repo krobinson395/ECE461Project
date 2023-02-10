@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as readline from 'readline';
-let {PythonShell} = require('python-shell'); 
-import * as dotenv from 'dotenv';
+import dotenv from "dotenv"
 
 dotenv.config()
 
