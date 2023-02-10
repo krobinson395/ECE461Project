@@ -12,12 +12,12 @@ def main():
         cloneRepo(gitURL, repoDir)
         createClocFile(repoDir, 'clocOutput')
         clocOut = readClocFile('clocOutput')
-        rampUp = calcRampUp(clocOut[0], clocOut[1])
         findTestDirs(repoDir)
         numTestLines = countLinesTest('testList', repoDir)
         correctness = numTestLines / (clocOut[1] - numTestLines) * 0.6 + numTestLines * .001
         correctness  = 1 if correctness > 1 else correctness
         #print('Ramp Up: ' + str(rampUp))
+        rampUp = calcRampUp(clocOut[0], clocOut[1, numTestLines])
         writeToFile('info.tmp', gitURL, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
         deleteRepo(repoDir)
         tokens = line.split('/')
@@ -59,9 +59,9 @@ def readClocFile(inputFile):
                 numTotalLines = numComments + numCodeLines
     return([numComments, numCodeLines, numTotalLines])
 
-def calcRampUp(docLines, codeLines):
-    ratio = docLines/codeLines
-    rampUp = math.tanh(1.5 * ratio / (math.log(codeLines, 100)))
+def calcRampUp(docLines, codeLines, testLines):
+    ratio = docLines/(codeLines - testLines)
+    rampUp = math.tanh(3 * ratio / (math.log(codeLines - testLines, 100)))
     return(rampUp)
 
 def writeToFile(fileName, gitURL, docLines, codeLines, rampUp, correctness):
