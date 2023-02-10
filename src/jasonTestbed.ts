@@ -6,7 +6,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
 const octokit = new Octokit ({
-    auth: `token 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`, 
+    auth: `token `, 
     userAgent: '461npm v1.2.3',
     baseUrl: 'https://api.github.com'
 });
