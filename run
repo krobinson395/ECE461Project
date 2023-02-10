@@ -23,6 +23,9 @@ then
 	tsc src/npmToGithub.ts
 	tsc src/licRespFetch.ts
 	tsc src/busfactor.ts
+elif [ "$1" == "test" ];
+then
+	echo Beginning test process
 else
 	echo Running main program
 	echo File location: $1
