@@ -112,7 +112,7 @@ function calculateBusFactor(forkCount: number, daysSinceCommit: number)
 
     const daysSinceCommit = calculateDays(commitDate)
     const busFactor = calculateBusFactor(forkCount, daysSinceCommit)
-    console.log(busFactor)
+    // console.log(busFactor)
 
     fs.appendFileSync('info.tmp', busFactor.toString());
   })()
