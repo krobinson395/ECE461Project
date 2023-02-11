@@ -20,7 +20,7 @@ async function license(owner: string , repo:string ) {
         var licenseName = ['bsd-2-clause License', 'wtfpl License', 'Zlib License', 'Unlicense', 'ncsa License'
         , 'MIT License', 'ISC License', 'LGPL-3.0 License', 'LGPL-2.1 License', 'GPL-2.0 License', 'postgresql License']; 
 
-        if (licenseName.includes(repository.license.name)){
+        if (repository.license != null && licenseName.includes(repository.license.name)){
             fs.appendFileSync('info.tmp', '1.0');
             //console.log(repository.license.name);
         }
