@@ -10,7 +10,7 @@ import * as fs from 'fs';
 
 // Send GraphQL query to GitHub API
 // Returns a promise to the number of forks in a given repository
-async function getForkCount(owner: string, repo: string)
+export async function getForkCount(owner: string, repo: string)
 {
     const octokit = new Octokit({auth: `token ${process.env.GITHUB_TOKEN}`});
 
@@ -23,12 +23,14 @@ async function getForkCount(owner: string, repo: string)
 
     try {
         const response = await octokit.graphql(query)
-        return response
+        const forkData = JSON.parse(JSON.stringify(response))
+        const forkCount = forkData.repository.forkCount
+        return forkCount
     }
 
     catch (error){
         if(error instanceof Error) {
-            return error.message
+        return error.message
         }
 
     }
@@ -36,19 +38,22 @@ async function getForkCount(owner: string, repo: string)
     
 }
 
+
 // Send REST query to GitHub API
 // Returns a promise to the most recent commit
-async function getRecentCommit(owner: string, repo: string)
+export async function getRecentCommit(owner: string, repo: string)
 {
     const octokit = new Octokit({auth: `token ${process.env.GITHUB_TOKEN}`});
     try
     {
-        const response = await octokit.request('GET /repos/{owner}/{repo}/commits', {
+        const commitResponse = await octokit.request('GET /repos/{owner}/{repo}/commits', {
             owner: owner,
             repo: repo,
             per_page: 1,
         });
-        return response;
+        const commitData = JSON.parse(JSON.stringify(commitResponse))
+        const commitDate = commitData.data[0].commit.author.date.split("T")[0]
+        return commitDate;
     }
     catch(error)
     {
@@ -59,8 +64,10 @@ async function getRecentCommit(owner: string, repo: string)
     
 }
 
+
+
 // Returns number of days passed since commitDate
-function calculateDays(commitDate: string)
+export function calculateDays(commitDate: string)
 {
     const currentDate = new Date();
 
@@ -73,8 +80,8 @@ function calculateDays(commitDate: string)
 
     const timeDifference = currentDate.getTime() - dateObject.getTime();
     const differenceInDays = Math.round(timeDifference / (1000 * 3600 * 24));
-
     return differenceInDays
+    
 }
 
 
@@ -84,7 +91,7 @@ function calculateDays(commitDate: string)
 // Else busfactor = forkCount/1000/time factor
 // Time factor = years passed since most recent commit + 1
 // If most recent commit is within 1 year, time factor = 1
-function calculateBusFactor(forkCount: number, daysSinceCommit: number)
+export function calculateBusFactor(forkCount: number, daysSinceCommit: number)
 {
     const timeFactor = Math.ceil(daysSinceCommit/365)
     
@@ -102,28 +109,19 @@ function calculateBusFactor(forkCount: number, daysSinceCommit: number)
     const owner = process.argv[2]
     const repo = process.argv[3]
 
-    const forkResponse = await getForkCount(owner, repo)
-    const forkData = JSON.parse(JSON.stringify(forkResponse))
-    const forkCount = forkData.repository.forkCount
+    try
+    {
+        const forkCount = await getForkCount(owner, repo)
+        const commitDate = await getRecentCommit(owner, repo)
+        const daysSinceCommit = calculateDays(commitDate)
+        const busFactor = calculateBusFactor(forkCount, daysSinceCommit)
+        fs.appendFileSync('info.tmp', busFactor.toString());
+    }
     
-    const commitResponse = await getRecentCommit(owner, repo)
-    const commitData = JSON.parse(JSON.stringify(commitResponse))
-    const commitDate = commitData.data[0].commit.author.date.split("T")[0]
-
-    const daysSinceCommit = calculateDays(commitDate)
-    const busFactor = calculateBusFactor(forkCount, daysSinceCommit)
-    // console.log(busFactor)
-
-    fs.appendFileSync('info.tmp', busFactor.toString());
+    catch(error)
+    {
+        if(error instanceof Error)       
+            return error.message
+    }
+    
   })()
-
-
-
-// old main function
-// export async function busFactorMain(owner: string, repo: string)
-// {
-//     const response = await getForkCount(owner, repo)
-//     const data = JSON.parse(JSON.stringify(response))    
-//     const busFactor = calculateBusFactor(data.repository.forkCount)
-//     fs.writeFileSync('info.tmp', busFactor.toString());
-// }
