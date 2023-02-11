@@ -21,7 +21,7 @@ elif [ "$1" == "build" ];
 then
 	echo Beginning build process
 	tsc src/npmToGithub.ts
-	tsc src/licRespFetch.ts
+	tsc src/licAndResp.ts
 	tsc src/busfactor.ts
 elif [ "$1" == "test" ];
 then

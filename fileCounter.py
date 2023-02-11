@@ -33,17 +33,18 @@ def main():
         tempFile = open('info.tmp', 'r')
         tempInfo = tempFile.read().splitlines()
         #print(tempInfo)
-        netScore = float(tempInfo[3]) + float(tempInfo[4]) + float(tempInfo[6]) + float(tempInfo[7])
-        netScore = netScore / 4
+        netScore = float(tempInfo[3]) * 0.175 + float(tempInfo[4]) * 0.175 + float(tempInfo[6]) * 0.25 + float(tempInfo[7]) * 0.4
+        netScore = netScore * float(tempInfo[5]);
         tempFile.close()
-        print("PRINTNG NET SCORE")
-        print(str(netScore))
-        tempInfo = open('info.tmp', 'a')
-        tempInfo.write('\n' + str(netScore))
-        tempInfo.close()
+        createJSONFile(tempInfo, netScore)
+        #print("PRINTNG NET SCORE")
+        #print(str(netScore))
+        #tempInfo = open('info.tmp', 'a')
+        #tempInfo.write('\n' + str(netScore))
+        #tempInfo.close()
         #TESTING
-        os.system('cat info.tmp')
-        os.system('echo \n')
+        #os.system('cat info.tmp')
+        #os.system('echo \n')
         os.system('rm info.tmp')
 def createClocFile(repoDir, outputFile):
 
@@ -113,6 +114,11 @@ def countLinesTest(testFile, repoDir):
     os.system("rm ./numTestLines")
     os.system("rm ./testList")
     return(lineCount);
+def createJSONFile(tmpInfo, netScore):
+    jsonString = '{"URL":"' + tmpInfo[0] +', "NET_SCORE":' + str(netScore) + ', "RAMP_UP_SCORE":'+ tmpInfo[3];
+    jsonString += ', "CORRECTNESS_SCORE":' + tmpInfo[4] + ', "BUS_FACTOR_SCORE":' + tmpInfo[7];
+    jsonString += ', "RESPONSIVE_MAINTAINER_SCORE":' + tmpInfo[6] + ', "LICENSE_SCORE":' + tmpInfo[5] + '}\n'
+    print(jsonString)
 
 if __name__ == "__main__":
     main()
