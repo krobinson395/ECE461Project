@@ -48,7 +48,7 @@ const resp = async(line:string) => {
                 result = result.replace('.git', emptyString)
                 //console.log(result)
                 //need to make sure there is actually something there matching before writing
-                writeToFile(outputFile, result, "error in writing to log file")
+                writeToFile(outputFile, "https://" + result, "error in writing to log file")
                 writeToFile(logFile, "Wrote npm now github link succesfully!: " + result, "error in writing to log file")
             }
             else{
@@ -93,7 +93,7 @@ lineReader.on('line', (line) => {
     else if(line.includes(githubURLMatch)){
         var result = line.substring(line.lastIndexOf("github.com"))
         writeToFile(logFile, "github link identified: " + result, "error in writing to log file")   
-        writeToFile(outputFile, result, "error in writing to output file")  
+        writeToFile(outputFile, "https://" + result, "error in writing to output file")  
     }
     else {
         writeToFile(logFile, "neither url link identiied, check input format. provided url: " + line , "error in writing to log file")  
