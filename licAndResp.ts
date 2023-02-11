@@ -1,3 +1,4 @@
+
 const fs = require("fs");
 const {Octokit} = require("@octokit/rest");
 const { request } = require("@octokit/request");
@@ -17,8 +18,9 @@ async function license(owner: string , repo:string ) {
           
         });
 
-        var licenseName = ['bsd-2-clause License', 'wtfpl License', 'Zlib License', 'Unlicense', 'ncsa License'
-        , 'MIT License', 'ISC License', 'LGPL-3.0 License', 'LGPL-2.1 License', 'GPL-2.0 License', 'postgresql License']; 
+        var licenseName = ['BSD 2-Clause "Simplified" License', 'Do What The F*ck You Want To Public License', 'zlib License', 'The Unlicense', 'ncsa License'
+        , 'MIT License', 'ISC License', 'GNU Lesser General Public License v3.0', 'GNU Lesser General Public License v2.1', 'GNU General Public License v2.0', 'PostgreSQL License']; 
+
 
         if (licenseName.includes(repository.license.name)){
             fs.appendFileSync('info.tmp', '1.0');
