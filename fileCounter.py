@@ -28,7 +28,7 @@ def main():
             repo = repo[:-4]
     
         #Call extra js files
-        os.system('node ./src/licRespFetch.js ' + owner + ' ' + repo)
+        os.system('node ./src/licAndResp.js ' + owner + ' ' + repo)
         os.system('node ./src/busfactor.js ' + owner + ' ' + repo)
         tempFile = open('info.tmp', 'r')
         tempInfo = tempFile.read().splitlines()
