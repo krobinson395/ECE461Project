@@ -16,15 +16,6 @@ total_lines += summary.get('num_statements')
 
 
 
-file = open('../coverage/coverage-summary.json')
-jestData = json.load(file)
-#print(jestData.keys())
-jestTotal = jestData.get('total')
-#print(jestTotal.keys())
-jestStatements = jestTotal.get('statements')
-#print(jestStatements.keys())
-covered_lines += jestStatements.get('covered')
-total_lines += jestStatements.get('total')
 
 coverage = (covered_lines / total_lines) * 100
 inputFile = open('pythonResults.txt', 'r')
