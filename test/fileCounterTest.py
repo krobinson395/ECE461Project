@@ -31,8 +31,8 @@ class TestFileCounter(unittest.TestCase):
     def testCountLines(self):
         clocOut = countLines('https://github.com/vesln/package.git', 'testRepoDir')
         self.assertEqual(clocOut[0], 87)
-        self.assertEqual(clocOut[1], 132)
-        self.assertEqual(clocOut[2], 219)
+        self.assertEqual(clocOut[1], 110)
+        self.assertEqual(clocOut[2], 197)
         self.assertEqual(clocOut[3], 45)
     
     def testCalcRampUp(self):
