@@ -1,5 +1,4 @@
 #!/bin/bash
-echo Starting Execution!
 
 if [ "$1" == "install" ];
 then
