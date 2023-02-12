@@ -16,7 +16,6 @@ then
 	npm install @octokit/request
 	npm install types
 	npm i --save-dev @types/node
-	npm i --save-dev jest babel-jest @babel/core @babel/preset-env @babel/preset-typescript ts-jest @types/jest
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 	export NVM_DIR="$HOME/.nvm"
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -34,7 +33,6 @@ then
 	cd test
 	python3 -m coverage run -m fileCounterTest > /dev/null 2>&1
 	python3 -m coverage json > /dev/null 2>&1
-	npm run test-coverage > /dev/null 2>&1
 	python3 parseJSON.py
 else
 	node src/npmToGithub.js $1
