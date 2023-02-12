@@ -31,6 +31,8 @@ def main():
         #os.system('echo \n')
         os.system('rm info.tmp')
 
+def testImport():
+    print("Imported Succesfully!")
 def readTempFile(tmpFile):
     tempFile = open(tmpFile, 'r')
     tempInfo = tempFile.read().splitlines()
