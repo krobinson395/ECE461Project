@@ -105,10 +105,10 @@ export function lineMatching(line:string){
         var result = line.substring(line.lastIndexOf("github.com"))
         result = "https://" + result
         writeToFile(logFile, "github link identified: " + result, "error in writing to log file")   
-        writeToFile(outputFile,  result, "error in writing to output file")
+        writeToFile(outputFile, "https://" + result, "error in writing to output file")
         return(result)
     }
-   else {
+    else {
         writeToFile(logFile, "neither url link identiied, check input format. provided url: " + line , "error in writing to log file")  
         return("noMatch")
     } 
@@ -139,4 +139,3 @@ export function npmToGithubDriver(urlList: string){
 }
 
 npmToGithubDriver(process.argv[2]);
-
