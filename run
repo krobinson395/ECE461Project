@@ -21,6 +21,13 @@ then
 	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 	nvm install v18.14.0
 	nvm use v18.14.0
+	tsc --init
+	npm install mocha --save-dev
+	npm install chai @types/chai --save-dev
+	npm install sinon @types/sinon --save-dev
+	npm install @types/mocha --save-dev
+	npm i nyc --save-dev
+	npm install --save-dev mochawesome
 
 elif [ "$1" == "build" ];
 then
