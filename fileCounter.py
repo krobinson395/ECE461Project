@@ -21,8 +21,7 @@ def main():
         outputJSON = createJSONFile(tempInfo)
         print(outputJSON)
 
-def testImport():
-    print("Imported Succesfully!")
+#reads the completed version of the info file (inter-system storage), calculates netScore from the information and outputs the results as a list of strings
 def readTempFile(tmpFile):
     tempFile = open(tmpFile, 'r')
     tempInfo = tempFile.read().splitlines()
@@ -33,6 +32,7 @@ def readTempFile(tmpFile):
     os.system("rm " + tmpFile)
     return(tempInfo)
 
+#Tokenizes the reopURL to extract the owner and repo name to be passed to other functions in the system
 def createTokens(repoURL):
     tokens = repoURL.split('/')
     owner = tokens[len(tokens) - 2]
@@ -42,6 +42,7 @@ def createTokens(repoURL):
         repo = repo[:-4]
     return(owner,repo)
 
+#Calculates the correctness score using the cloco data produced from countLines
 def calcCorrectness(clocOut):
     diff = clocOut[1] - clocOut[3]
     diff = 1 if diff == 0 else diff
@@ -49,7 +50,7 @@ def calcCorrectness(clocOut):
     correctness  = 1 if correctness > 1 else correctness
     return(correctness)
 
-
+#Counts the number of lines of code and returns an output in the form [numDocLines, numCodeLines, totalNumLines, numTestLines]
 def countLines(repoURL, repoDir):
     cloneRepo(repoURL, repoDir)
     createClocFile(repoDir, 'clocOutput')
@@ -59,7 +60,8 @@ def countLines(repoURL, repoDir):
     clocOut.append(numTestLines)
     deleteRepo(repoDir)
     return(clocOut)
-
+#Runs the installed cloc commands and creates a file containing a csv version of the data. The first line contians all code
+#The second line contains specifically documentation related files
 def createClocFile(repoDir, outputFile):
 
     clocLoc = 'cloc/cloc'
@@ -68,6 +70,7 @@ def createClocFile(repoDir, outputFile):
     cmd = clocLoc + ' --csv --include-lang=Markdown,Text,TeX ' + repoDir + ' | tail -n 1 >> ' + outputFile
     os.system(cmd)
 
+#Reads the outputted cloc file and calculates numComments, numCodeLines and numTotalLines
 def readClocFile(inputFile):
     numComments = 0
     numCodeLines = 0
@@ -86,13 +89,15 @@ def readClocFile(inputFile):
                 numTotalLines = numComments + numCodeLines
     return([numComments, numCodeLines, numTotalLines])
 
+
+#Calculates the ramp up score using the following formula: tanh(3* (docLine/(codeLines - testLines)) / (log_100(codeLines - testLines)))
 def calcRampUp(docLines, codeLines, testLines):
     adjLines = codeLines - testLines
     adjLines = adjLines if adjLines >= 0 else 1
     ratio = docLines/adjLines
     rampUp = math.tanh(3 * ratio / (math.log(codeLines - testLines, 100)))
     return(rampUp)
-
+#Writes relevant data to the info file to be accessed later and by other programs
 def writeToFile(fileName, gitURL, docLines, codeLines, rampUp, correctness):
     file = open(fileName, 'w')
     file.write(gitURL + "\n")
@@ -101,18 +106,24 @@ def writeToFile(fileName, gitURL, docLines, codeLines, rampUp, correctness):
     file.write(rampUp + "\n")
     file.write(correctness + "\n")
     file.close()
+
+#Uses gitPython to clone the target repo into the designated repo directory
 def cloneRepo(gitURL, repoDir):
     git.Repo.clone_from(gitURL, './' + repoDir)
 
+#Cleans the temporary repo directory
 def deleteRepo(repoDir):
     os.system('rm -rf ./' + repoDir )
     #os.system('rmdir tmpRepo')
 
+#Creates a file containing all possible test files of a given repo
 def findTestDirs(repoDir):
     cmd1 = "ls " + repoDir + " | grep test > testList"
     cmd2 = "ls " + repoDir + " | grep Test >> testList"
     os.system(cmd1)
     os.system(cmd2)
+
+#Loops through the given file to count lines of test code
 def countLinesTest(testFile, repoDir):
     file = open(testFile, 'r')
     testDirs = file.read().splitlines()
@@ -130,7 +141,7 @@ def countLinesTest(testFile, repoDir):
     os.system("rm ./numTestLines")
     os.system("rm ./testList")
     return(lineCount);
-
+#Uses tmpInfo created from the info.tmp file to output the NDJSON file
 def createJSONFile(tmpInfo):
     jsonString = '{"URL":"' + tmpInfo[0] +'", "NET_SCORE":' + tmpInfo[8] + ', "RAMP_UP_SCORE":'+ tmpInfo[3];
     jsonString += ', "CORRECTNESS_SCORE":' + tmpInfo[4] + ', "BUS_FACTOR_SCORE":' + tmpInfo[7];
