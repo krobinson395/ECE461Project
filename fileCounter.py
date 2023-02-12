@@ -8,7 +8,7 @@ def main():
     file  = open('githubURLS.txt', 'r')
     lines = file.read().splitlines()
     for line in lines:
-        clocOut = countLines(line)
+        clocOut = countLines(line, repoDir)
         #print('Ramp Up: ' + str(rampUp))
         correctness = calcCorrectness(clocOut)
         rampUp = calcRampUp(clocOut[0], clocOut[1], clocOut[2])
@@ -55,8 +55,8 @@ def calcCorrectness(clocOut):
     return(correctness)
 
 
-def countLines(repoURL):
-    cloneRepo(gitURL, repoDir)
+def countLines(repoURL, repoDir):
+    cloneRepo(repoUrl, repoDir)
     createClocFile(repoDir, 'clocOutput')
     clocOut = readClocFile('clocOutput')
     findTestDirs(repoDir)
