@@ -11,8 +11,8 @@ def main():
         clocOut = countLines(line, repoDir)
         #print('Ramp Up: ' + str(rampUp))
         correctness = calcCorrectness(clocOut)
-        rampUp = calcRampUp(clocOut[0], clocOut[1], clocOut[2])
-        writeToFile('info.tmp', gitURL, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
+        rampUp = calcRampUp(clocOut[0], clocOut[1], clocOut[3])
+        writeToFile('info.tmp', line, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
         deleteRepo(repoDir)
         owner, repo = createTokens(line)   
         #Call extra js files
@@ -41,7 +41,7 @@ def readTempFile(tmpFile):
     return(tempInfo)
 
 def createTokens(repoURL):
-    tokens = line.split('/')
+    tokens = repoURL.split('/')
     owner = tokens[len(tokens) - 2]
     repo = tokens[len(tokens) - 1]
 
@@ -50,7 +50,7 @@ def createTokens(repoURL):
     return(owner,repo)
 
 def calcCorrectness(clocOut):
-    correctness = clocOut[2] / (clocOut[1] - clocOut[2]) * 0.6 + clocOut[2] * .001
+    correctness = clocOut[3] / (clocOut[1] - clocOut[3]) * 0.6 + clocOut[3] * .001
     correctness  = 1 if correctness > 1 else correctness
     return(correctness)
 
@@ -61,7 +61,8 @@ def countLines(repoURL, repoDir):
     clocOut = readClocFile('clocOutput')
     findTestDirs(repoDir)
     numTestLines = countLinesTest('testList', repoDir)
-    return(clocOut.append(numTestLines))
+    clocOut.append(numTestLines)
+    return(clocOut)
 
 def createClocFile(repoDir, outputFile):
 
@@ -90,7 +91,9 @@ def readClocFile(inputFile):
     return([numComments, numCodeLines, numTotalLines])
 
 def calcRampUp(docLines, codeLines, testLines):
-    ratio = docLines/(codeLines - testLines)
+    adjLines = codeLines - testLines
+    adjLines = adjLines if adjLines >= 0 else 1
+    ratio = docLines/adjLines
     rampUp = math.tanh(3 * ratio / (math.log(codeLines - testLines, 100)))
     return(rampUp)
 
