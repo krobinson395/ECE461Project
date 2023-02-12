@@ -20,15 +20,6 @@ def main():
         tempInfo = readTempFile('info.tmp')
         outputJSON = createJSONFile(tempInfo)
         print(outputJSON)
-        #print("PRINTNG NET SCORE")
-        #print(str(netScore))
-        #tempInfo = open('info.tmp', 'a')
-        #tempInfo.write('\n' + str(netScore))
-        #tempInfo.close()
-        #TESTING
-        #os.system('cat info.tmp')
-        #os.system('echo \n')
-        os.system('rm info.tmp')
 
 def testImport():
     print("Imported Succesfully!")
@@ -39,6 +30,7 @@ def readTempFile(tmpFile):
     netScore = netScore * float(tempInfo[5]);
     tempFile.close()
     tempInfo.append(str(netScore))
+    os.system("rm " + tmpFile)
     return(tempInfo)
 
 def createTokens(repoURL):
