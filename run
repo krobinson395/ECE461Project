@@ -21,7 +21,6 @@ then
 	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 	nvm install v18.14.0
 	nvm use v18.14.0
-	run code snippet
 
 elif [ "$1" == "build" ];
 then
