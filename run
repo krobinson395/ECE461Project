@@ -16,6 +16,13 @@ then
 	npm i --save-dev @types/node
 	npm install jest@20.0.0
 	npm i --save-dev babel-jest @babel/core @babel/preset-env @babel/preset-typescript ts-jest @types/jest
+	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+	nvm install v18.14.0
+	nvm use v18.14.0
+	run code snippet
 
 elif [ "$1" == "build" ];
 then
