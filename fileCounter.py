@@ -8,35 +8,19 @@ def main():
     file  = open('githubURLS.txt', 'r')
     lines = file.read().splitlines()
     for line in lines:
-        gitURL = line
-        cloneRepo(gitURL, repoDir)
-        createClocFile(repoDir, 'clocOutput')
-        clocOut = readClocFile('clocOutput')
-        findTestDirs(repoDir)
-        numTestLines = countLinesTest('testList', repoDir)
-        correctness = numTestLines / (clocOut[1] - numTestLines) * 0.6 + numTestLines * .001
-        correctness  = 1 if correctness > 1 else correctness
+        clocOut = countLines(line)
         #print('Ramp Up: ' + str(rampUp))
-        rampUp = calcRampUp(clocOut[0], clocOut[1], numTestLines)
+        correctness = calcCorrectness(clocOut)
+        rampUp = calcRampUp(clocOut[0], clocOut[1], clocOut[2])
         writeToFile('info.tmp', gitURL, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
         deleteRepo(repoDir)
-        tokens = line.split('/')
-        owner = tokens[len(tokens) - 2]
-        repo = tokens[len(tokens) - 1]
-
-        if repo.endswith(".git"):
-            repo = repo[:-4]
-    
+        owner, repo = createTokens(line)   
         #Call extra js files
         os.system('node ./src/licAndResp.js ' + owner + ' ' + repo)
         os.system('node ./src/busfactor.js ' + owner + ' ' + repo)
-        tempFile = open('info.tmp', 'r')
-        tempInfo = tempFile.read().splitlines()
-        #print(tempInfo)
-        netScore = float(tempInfo[3]) * 0.175 + float(tempInfo[4]) * 0.175 + float(tempInfo[6]) * 0.25 + float(tempInfo[7]) * 0.4
-        netScore = netScore * float(tempInfo[5]);
-        tempFile.close()
-        createJSONFile(tempInfo, netScore)
+        tempInfo = readTempFile('info.tmp')
+        outputJSON = createJSONFile(tempInfo)
+        print(outputJSON)
         #print("PRINTNG NET SCORE")
         #print(str(netScore))
         #tempInfo = open('info.tmp', 'a')
@@ -46,6 +30,39 @@ def main():
         #os.system('cat info.tmp')
         #os.system('echo \n')
         os.system('rm info.tmp')
+
+def readTempFile(tmpFile):
+    tempFile = open(tmpFile, 'r')
+    tempInfo = tempFile.read().splitlines()
+    netScore = float(tempInfo[3]) * 0.175 + float(tempInfo[4]) * 0.175 + float(tempInfo[6]) * 0.25 + float(tempInfo[7]) * 0.4
+    netScore = netScore * float(tempInfo[5]);
+    tempFile.close()
+    tempInfo.append(str(netScore))
+    return(tempInfo)
+
+def createTokens(repoURL):
+    tokens = line.split('/')
+    owner = tokens[len(tokens) - 2]
+    repo = tokens[len(tokens) - 1]
+
+    if repo.endswith(".git"):
+        repo = repo[:-4]
+    return(owner,repo)
+
+def calcCorrectness(clocOut):
+    correctness = clocOut[2] / (clocOut[1] - clocOut[2]) * 0.6 + clocOut[2] * .001
+    correctness  = 1 if correctness > 1 else correctness
+    return(correctness)
+
+
+def countLines(repoURL):
+    cloneRepo(gitURL, repoDir)
+    createClocFile(repoDir, 'clocOutput')
+    clocOut = readClocFile('clocOutput')
+    findTestDirs(repoDir)
+    numTestLines = countLinesTest('testList', repoDir)
+    return(clocOut.append(numTestLines))
+
 def createClocFile(repoDir, outputFile):
 
     clocLoc = 'cloc/cloc'
@@ -114,11 +131,12 @@ def countLinesTest(testFile, repoDir):
     os.system("rm ./numTestLines")
     os.system("rm ./testList")
     return(lineCount);
-def createJSONFile(tmpInfo, netScore):
-    jsonString = '{"URL":"' + tmpInfo[0] +', "NET_SCORE":' + str(netScore) + ', "RAMP_UP_SCORE":'+ tmpInfo[3];
+
+def createJSONFile(tmpInfo):
+    jsonString = '{"URL":"' + tmpInfo[0] +', "NET_SCORE":' + tmpInfo[8] + ', "RAMP_UP_SCORE":'+ tmpInfo[3];
     jsonString += ', "CORRECTNESS_SCORE":' + tmpInfo[4] + ', "BUS_FACTOR_SCORE":' + tmpInfo[7];
     jsonString += ', "RESPONSIVE_MAINTAINER_SCORE":' + tmpInfo[6] + ', "LICENSE_SCORE":' + tmpInfo[5] + '}\n'
-    print(jsonString)
+    return(jsonString)
 
 if __name__ == "__main__":
     main()
