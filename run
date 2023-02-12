@@ -14,8 +14,7 @@ then
 	npm install @octokit/request
 	npm install types
 	npm i --save-dev @types/node
-	npm install jest@20.0.0
-	npm i --save-dev babel-jest @babel/core @babel/preset-env @babel/preset-typescript ts-jest @types/jest
+	npm i --save-dev jest babel-jest @babel/core @babel/preset-env @babel/preset-typescript ts-jest @types/jest
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 	export NVM_DIR="$HOME/.nvm"
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
