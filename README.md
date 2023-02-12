@@ -21,4 +21,5 @@
 > * Responsive Maintainer Score
 > * License Score
 
-
+## System Description
+This tool takes in an input file of a set of new line delimited URL’s within either the npmjs or GitHub domain. It parses the file, rejecting any invalid URL’s that either aren’t within the domains currently implemented or that do not have an appropriate linked GitHub repository. Once valid URL’s are determined it begins rating the valid URL’s on several metrics. These metrics are Ramp Up Score, Correctness Sore, Bus Factor Score, Responsive Maintainer Score, and License Compatibility score. These metrics are then congregated into a weighted Net Score metric according to client priorities. The result of this outputted to stdout in the for of a NDJSON file with one entry for each URL in the input file. 
