@@ -56,7 +56,7 @@ def calcCorrectness(clocOut):
 
 
 def countLines(repoURL, repoDir):
-    cloneRepo(repoUrl, repoDir)
+    cloneRepo(repoURL, repoDir)
     createClocFile(repoDir, 'clocOutput')
     clocOut = readClocFile('clocOutput')
     findTestDirs(repoDir)
