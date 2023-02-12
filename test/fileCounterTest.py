@@ -2,6 +2,7 @@ import sys
 sys.path.insert(0, '..')
 from fileCounter import *
 import unittest
+import json
 
 class TestFileCounter(unittest.TestCase):
 
@@ -46,8 +47,25 @@ class TestFileCounter(unittest.TestCase):
         print(testString)
         print(createdString)
         self.assertEqual(createdString, testString)
+
+def warp_test_suite(testcase_class):
+    suite = unittest.TestSuite()
+    tests = unittest.defaultTestLoader.loadTestsFromTestCase(testcase_class)
+    suite.addTest(tests)
+    return(suite)
         
 
 if __name__ == '__main__':
     unittest.main()
+    result_value = {"Failures": 0, "Ran" : 0}
+    runner = unittest.TextTestRunner()
+    TextTestResult = runner.run(warp_test_suite(TestDummy))
+
+    result_value["Failures"] += len(TextTestResult.failures)
+    result_value["Failures"] += len(TextTestResult.errors)
+    result_value["Failures"] += len(TextTestResult.skipped)
+    result_value["Ran"] += TextTestResult.testsRun
+    outputFile = open('pythonResults.txt', 'w')
+    outputFile.write(result_value["Failures"])
+    outputFile.write(result_value["Ran"])
 

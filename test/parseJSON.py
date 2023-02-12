@@ -16,6 +16,12 @@ total_lines = summary.get('num_statements')
 
 coverage = (covered_lines / total_lines) * 100
 
-print(f'Test Coverage {coverage}%');
+inputFile = open('pythonResults.txt', 'r')
+testData = outputFile.read().splitlines()
+passed = int(testData[1]) - int(testData[0])
+total = testData[1]
+
+
+print(f'{passed}/{total} test cases passed. {coverage}% line coverage achieved.');
 
 
