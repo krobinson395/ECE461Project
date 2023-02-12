@@ -8,7 +8,7 @@ class TestFileCounter(unittest.TestCase):
 
 
     def testReadTempFile(self):
-        tempInfo = readTempFile("testInfo.tmp")
+        tempInfo = readTempFile("testInfo.txt")
         self.assertEqual(tempInfo[0], "https://github.com/paulmillr/popular-user-agents")
         self.assertEqual(tempInfo[1], str(314))
         self.assertEqual(tempInfo[2], str(500))
@@ -56,16 +56,15 @@ def warp_test_suite(testcase_class):
         
 
 if __name__ == '__main__':
-    unittest.main()
     result_value = {"Failures": 0, "Ran" : 0}
     runner = unittest.TextTestRunner()
-    TextTestResult = runner.run(warp_test_suite(TestDummy))
+    TextTestResult = runner.run(warp_test_suite(TestFileCounter))
 
     result_value["Failures"] += len(TextTestResult.failures)
     result_value["Failures"] += len(TextTestResult.errors)
     result_value["Failures"] += len(TextTestResult.skipped)
     result_value["Ran"] += TextTestResult.testsRun
     outputFile = open('pythonResults.txt', 'w')
-    outputFile.write(result_value["Failures"])
-    outputFile.write(result_value["Ran"])
+    outputFile.write(str(result_value["Failures"] ) + "\n")
+    outputFile.write(str(result_value["Ran"]))
 
