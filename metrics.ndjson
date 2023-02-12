@@ -1,0 +1,5 @@
+{"metric":"RAMP_UP_SCORE", "api":"clone", "filepath":"./fileCounter.py","line":112}
+{"metric":"CORRECTNESS_SCORE", "api":"clone", "filepath":"./fileCounter.py", "line":112}
+{"metric":"BUS_FACTOR", "api":"graphql", "filepath":"./src/busfactor.ts", "line":49}
+{"metric":"RESPONSIVE_MAINTAINER_SCORE", "api":"rest", "filepath":"./src/licAndResp.ts", "line":46}
+{"metric":"LICENSE_SCORE", "api":"rest", "filepath":"./src/liAndResp.ts", "line":15}
