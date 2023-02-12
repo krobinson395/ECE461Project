@@ -3,18 +3,6 @@ import {lineMatching, writeToFile, npmCall, npmToGithubDriver, testingFunction} 
 //import {describe, expect, test} from '@jest/globals'
 
 
-
-
-describe("invalid test", () => 
-{
-
-    it("this test will fail due to a bug in jest", async () => 
-    {
-            const line = await npmCall("")
-            assert.equal(line, "error")
-    })
-})
-
 describe("Convert NPM link to Github link", () => 
 {
     

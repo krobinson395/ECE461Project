@@ -72,7 +72,7 @@ export async function npmCall(line:string){
         }
         else{
             writeToFile(logFile, "No git repository found for this package. At this time this tool only supports npm modules hosted on github repositories", "error in writing to log file")
-            return("NullData")
+            return("error")
         }
                     
     }

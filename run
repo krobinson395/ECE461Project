@@ -46,7 +46,7 @@ then
 	python3 parseJSON.py
 else
 	node src/npmToGithub.js $1
-	python3 fileCounter.py4
+	python3 fileCounter.py
 	 
 fi
 
