@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ "$1" == "install" ];
+then
+	pip install GitPython
+	pip install coverage
+	python3 setup.py
+	cp -r cloc ./test
+	npm install typescript
+	npm install fs
+	npm install readline
+	npm install python-shell
+	npm install dotenv
+	npm install @octokit/rest
+	npm install @octokit/core
+	npm install @octokit/request
+	npm install types
+	npm i --save-dev @types/node
+	npm i --save-dev jest babel-jest @babel/core @babel/preset-env @babel/preset-typescript ts-jest @types/jest
+	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+	nvm install v18.14.0
+	nvm use v18.14.0
+
+elif [ "$1" == "build" ];
+then
+	tsc src/npmToGithub.ts
+	tsc src/licAndResp.ts
+	tsc src/busfactor.ts
+elif [ "$1" == "test" ];
+then
+	cd test
+	python3 -m coverage run -m fileCounterTest > /dev/null 2>&1
+	python3 -m coverage json > /dev/null 2>&1
+	python3 parseJSON.py
+else
+	node src/npmToGithub.js $1
+	python3 fileCounter.py
+	 
+fi
+
