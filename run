@@ -40,7 +40,9 @@ then
 	cd test
 	python3 -m coverage run -m fileCounterTest > /dev/null 2>&1
 	python3 -m coverage json > /dev/null 2>&1
+	cd ..
 	npx nyc --reporter=text-summary mocha test/npmToGithub.spec.js --reporter mochawesome | tail -n 2 > test/nycCoverage
+	cd test
 	python3 parseJSON.py
 else
 	node src/npmToGithub.js $1
