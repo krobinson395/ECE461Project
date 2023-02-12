@@ -28,9 +28,25 @@ class TestFileCounter(unittest.TestCase):
         correctness = calcCorrectness(clocOut)
         self.assertEqual(round(correctness, 2), .12)
 
+    def testCountLines(self):
+        clocOut = countLines('https://github.com/vesln/package.git', 'testRepoDir')
+        self.assertEqual(clocOut[0], 87)
+        self.assertEqual(clocOut[1], 132)
+        self.assertEqual(clocOut[2], 219)
+        self.assertEqual(clocOut[3], 45)
     
+    def testCalcRampUp(self):
+        rampUp = calcRampUp(100,500,100)
+        self.assertEqual(round(rampUp , 2), .52)
 
-
+    def testCreateJSONFile(self):
+        tmpInfo = ["A/gitHUB/URL", '.1', '.2' , '.3' , '.4', '.5', '.6', '.7', '.8']
+        createdString = createJSONFile(tmpInfo)
+        testString = '{"URL":"A/gitHUB/URL", "NET_SCORE":.8, "RAMP_UP_SCORE":.3, "CORRECTNESS_SCORE":.4, "BUS_FACTOR_SCORE":.7, "RESPONSIVE_MAINTAINER_SCORE":.6, "LICENSE_SCORE":.5}\n'
+        print(testString)
+        print(createdString)
+        self.assertEqual(createdString, testString)
+        
 
 if __name__ == '__main__':
     unittest.main()

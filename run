@@ -4,6 +4,7 @@ if [ "$1" == "install" ];
 then
 	pip install GitPython
 	python3 setup.py
+	cp -r cloc ./test
 	npm install typescript
 	npm install fs
 	npm install readline

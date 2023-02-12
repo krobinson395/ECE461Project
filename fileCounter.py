@@ -13,7 +13,6 @@ def main():
         correctness = calcCorrectness(clocOut)
         rampUp = calcRampUp(clocOut[0], clocOut[1], clocOut[3])
         writeToFile('info.tmp', line, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
-        deleteRepo(repoDir)
         owner, repo = createTokens(line)   
         #Call extra js files
         os.system('node ./src/licAndResp.js ' + owner + ' ' + repo)
@@ -52,7 +51,9 @@ def createTokens(repoURL):
     return(owner,repo)
 
 def calcCorrectness(clocOut):
-    correctness = clocOut[3] / (clocOut[1] - clocOut[3]) * 0.6 + clocOut[3] * .001
+    diff = clocOut[1] - clocOut[3]
+    diff = 1 if diff == 0 else diff
+    correctness = clocOut[3] / diff * 0.6 + clocOut[3] * .001
     correctness  = 1 if correctness > 1 else correctness
     return(correctness)
 
@@ -64,6 +65,7 @@ def countLines(repoURL, repoDir):
     findTestDirs(repoDir)
     numTestLines = countLinesTest('testList', repoDir)
     clocOut.append(numTestLines)
+    deleteRepo(repoDir)
     return(clocOut)
 
 def createClocFile(repoDir, outputFile):
@@ -138,7 +140,7 @@ def countLinesTest(testFile, repoDir):
     return(lineCount);
 
 def createJSONFile(tmpInfo):
-    jsonString = '{"URL":"' + tmpInfo[0] +', "NET_SCORE":' + tmpInfo[8] + ', "RAMP_UP_SCORE":'+ tmpInfo[3];
+    jsonString = '{"URL":"' + tmpInfo[0] +'", "NET_SCORE":' + tmpInfo[8] + ', "RAMP_UP_SCORE":'+ tmpInfo[3];
     jsonString += ', "CORRECTNESS_SCORE":' + tmpInfo[4] + ', "BUS_FACTOR_SCORE":' + tmpInfo[7];
     jsonString += ', "RESPONSIVE_MAINTAINER_SCORE":' + tmpInfo[6] + ', "LICENSE_SCORE":' + tmpInfo[5] + '}\n'
     return(jsonString)
