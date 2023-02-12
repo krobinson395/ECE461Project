@@ -3,6 +3,7 @@
 if [ "$1" == "install" ];
 then
 	pip install GitPython
+	pip install coverage
 	python3 setup.py
 	cp -r cloc ./test
 	npm install typescript
@@ -28,12 +29,11 @@ then
 	tsc src/npmToGithub.ts
 	tsc src/licAndResp.ts
 	tsc src/busfactor.ts
-	tsc test/busfactor.test.ts
-	tsc licAndResp.test.ts
 elif [ "$1" == "test" ];
 then
-	echo Beginning test process
-	npm run test
+	cd test
+	python3 -m coverage run -m fileCounterTest > /dev/null 2>&1
+	python3 -m coverage json > /dev/null 2>&1
 else
 	node src/npmToGithub.js $1
 	python3 fileCounter.py
