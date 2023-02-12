@@ -14,15 +14,19 @@ then
 	npm install @octokit/request
 	npm install types
 	npm i --save-dev @types/node
+	npm i --save-dev jest babel-jest @babel/core @babel/preset-env @babel/preset-typescript ts-jest @types/jest
 
 elif [ "$1" == "build" ];
 then
 	tsc src/npmToGithub.ts
 	tsc src/licAndResp.ts
 	tsc src/busfactor.ts
+	tsc test/busfactor.test.ts
+	tsc licAndResp.test.ts
 elif [ "$1" == "test" ];
 then
 	echo Beginning test process
+	npm run test
 else
 	node src/npmToGithub.js $1
 	python3 fileCounter.py
