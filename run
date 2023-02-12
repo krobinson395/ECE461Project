@@ -34,6 +34,7 @@ then
 	cd test
 	python3 -m coverage run -m fileCounterTest > /dev/null 2>&1
 	python3 -m coverage json > /dev/null 2>&1
+	npm run test-coverage
 	python3 parseJSON.py
 else
 	node src/npmToGithub.js $1
