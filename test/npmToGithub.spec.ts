@@ -1,7 +1,7 @@
 import { assert } from 'chai'
 import {lineMatching, writeToFile, npmCall, npmToGithubDriver, testingFunction} from '../src/npmToGithub'
 //import {describe, expect, test} from '@jest/globals'
-
+import {getForkCount, getRecentCommit, calculateDays, calculateBusFactor} from '../src/busfactor'
 
 describe("Convert NPM link to Github link", () => 
 {
