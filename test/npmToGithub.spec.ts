@@ -81,7 +81,72 @@ describe("Driver Function testing ", () =>
 })
 
 
+describe("Get Fork Count", () =>
+{
+        it("should return 3 forks in a repo", async() =>
+        {
+                const forkCount = await getForkCount("krobinson395", "ECE461Project")
+                assert.equal(forkCount, 3)
+        })
+})
 
+
+describe("Get Fork Count Invalid", () =>
+{
+        it("should throw an error", async() =>
+        {
+                const forkCount = await getForkCount("krobinson395", "fakeproject")
+                assert.equal(forkCount, "Request failed due to following response errors:\n - Could not resolve to a Repository with the name 'krobinson395/fakeproject'.")
+        })
+})
+
+describe("Get Recent Commit", () =>
+{
+        it("should return most recent commit date", async() =>
+        {
+                const commitDate = await getRecentCommit("kulkar62", "HyperVerge-Bus-Reservations")
+                assert.equal(commitDate, "2022-03-09")
+        })
+})
+
+describe("Get Recent Commit Invalid", () =>
+{
+        it("should return Not Found", async() =>
+        {
+                const commitDate = await getRecentCommit("kulkar62", "fakerepo")
+                assert.equal(commitDate, "Not Found")
+        })
+})
+
+describe("Calculate Bus Factor on Personal Repo", () =>
+{
+        it("should return low score for personal repository", async() =>
+        {
+                const owner = "krobinson395"
+                const repo = "ECE461Project"
+                const forkCount = await getForkCount(owner, repo)
+                const commitDate = await getRecentCommit(owner, repo)
+                const daysSinceCommit = calculateDays(commitDate)
+                const busFactor = calculateBusFactor(forkCount, daysSinceCommit)
+                const bool = busFactor < 0.1
+                assert.equal(bool, true)
+        })
+})
+
+describe("Calculate Bus Factor on Popular Repo", () =>
+{
+        it("should return high score for a popular and active repository", async() =>
+        {
+                const owner = "ultralytics"
+                const repo = "yolov5"
+                const forkCount = await getForkCount(owner, repo)
+                const commitDate = await getRecentCommit(owner, repo)
+                const daysSinceCommit = calculateDays(commitDate)
+                const busFactor = calculateBusFactor(forkCount, daysSinceCommit)
+                const bool = busFactor > 0.9
+                assert.equal(bool, true)
+        })
+})
 
 
 
