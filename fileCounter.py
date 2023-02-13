@@ -15,7 +15,10 @@ def main():
         writeToFile('info.tmp', line, str(clocOut[0]), str(clocOut[1]), str(rampUp), str(correctness))
         owner, repo = createTokens(line)   
         #Call extra js files
-        os.system('node ./src/licAndResp.js ' + owner + ' ' + repo)
+        #os.system('node ./src/licAndResp.js ' + owner + ' ' + repo)
+        dummyCalls = open("info.tmp", "a")
+        dummyCalls.write("-1\n-1\n")
+        dummyCalls.close()
         os.system('node ./src/busfactor.js ' + owner + ' ' + repo)
         tempInfo = readTempFile('info.tmp')
         outputJSON = createJSONFile(tempInfo)
@@ -25,8 +28,8 @@ def main():
 def readTempFile(tmpFile):
     tempFile = open(tmpFile, 'r')
     tempInfo = tempFile.read().splitlines()
-    netScore = float(tempInfo[3]) * 0.175 + float(tempInfo[4]) * 0.175 + float(tempInfo[6]) * 0.25 + float(tempInfo[7]) * 0.4
-    netScore = netScore * float(tempInfo[5]);
+    netScore = float(tempInfo[3]) * 0.3 + float(tempInfo[4]) * 0.3 + float(tempInfo[7]) * 0.4
+    #netScore = netScore * float(tempInfo[5]);
     tempFile.close()
     tempInfo.append(str(netScore))
     os.system("rm " + tmpFile)
