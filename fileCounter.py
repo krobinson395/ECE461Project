@@ -5,6 +5,7 @@ import git
 import sys
 def main():
     repoDir = 'repoDir'
+    
     file  = open('githubURLS.txt', 'r')
     lines = file.read().splitlines()
     for line in lines:
@@ -55,6 +56,7 @@ def calcCorrectness(clocOut):
 
 #Counts the number of lines of code and returns an output in the form [numDocLines, numCodeLines, totalNumLines, numTestLines]
 def countLines(repoURL, repoDir):
+    deleteRepo(repoDir)
     cloneRepo(repoURL, repoDir)
     createClocFile(repoDir, 'clocOutput')
     clocOut = readClocFile('clocOutput')
