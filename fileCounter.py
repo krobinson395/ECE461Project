@@ -97,6 +97,7 @@ def readClocFile(inputFile):
 
 #Calculates the ramp up score using the following formula: tanh(3* (docLine/(codeLines - testLines)) / (log_100(codeLines - testLines)))
 def calcRampUp(docLines, codeLines, testLines):
+    print(testLines)
     adjLines = codeLines - testLines
     adjLines = adjLines if adjLines >= 0 else 1
     ratio = docLines/adjLines
@@ -125,24 +126,30 @@ def deleteRepo(repoDir):
 def findTestDirs(repoDir):
     cmd1 = "ls " + repoDir + " | grep test > testList"
     cmd2 = "ls " + repoDir + " | grep Test >> testList"
+    cmd3 = "echo \" \" >> testList"
     os.system(cmd1)
     os.system(cmd2)
+    os.system(cmd3)
 
 #Loops through the given file to count lines of test code
 def countLinesTest(testFile, repoDir):
     file = open(testFile, 'r')
     testDirs = file.read().splitlines()
     for testDir in testDirs:
-        fullDir = repoDir + '/' + testDir
+        fullDir = repoDir + '/' + testDir.strip()
         #print(fullDir)
         cmd = 'cloc/cloc --csv ' + fullDir + ' | tail -n 1 >> numTestLines'
+        cmd2 = 'echo " " >> numTestLines'
         #print(cmd)
-        os.system(cmd)
+        if(fullDir != repoDir + '/'):
+            os.system(cmd)
+        os.system(cmd2)
     lineCount = 0
     with open("./numTestLines") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=",")
         for row in csv_reader:
-            lineCount+= int(row[4])
+            if(len(row) >=4):
+                lineCount+= int(row[4])
     os.system("rm ./numTestLines")
     os.system("rm ./testList")
     return(lineCount);
